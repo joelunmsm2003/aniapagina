@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Ania</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="/static/manifest.json">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script> 
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Gilda+Display" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Cormorant+Infant" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+
+
+</head>
+
+
+<body>
+
+        
+       
+        <div class="container-fluid" style='background: #000;'>
+              <div class="row justify-content-end">
+                
+                <div class="col-md-auto" style='
+    color: #fff;'>
+Contacto: <a href="tel:1-847-555-5555">1-847-555-5555</a>
+                </div>
+                
+              </div>
+             
+            </div> 
+
+
+
+
+                      
+                {% block content %}
+                {% endblock %}
+
+
+                
+          <div id="fb-root"></div>
+
+
+<a href="#" class='btn btn-success' style='background:#4267b2;' onclick='logface()'>Iniciar sesion con Facebook</a>
+
+
+    </div>
+
+              
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+<script src='/static/js/facebook.js'></script>
+
+<!-- /.container -->
+<style>
+
+/*
+Removes white gap between slides - chagnge to base color of slide images
+*/
+.carousel {
+  background:#007aeb;
+}
+
+/*
+Forces image to be 100% width and not max width of 100%
+*/
+.carousel-item .img-fluid {
+  width:100%;
+}
+
+/* 
+anchors are inline so you need ot make them block to go full width
+*/
+.carousel-item a {
+  display: block;
+  width:100%;
+}
+
+
+.carousel-caption {
+
+    background: #234;
+    opacity: .7;
+    right: 40%;
+    left: 40%;
+}
+</style>
+    
+
+
+</body>
+
+
+
+
+</html>

@@ -74,6 +74,10 @@ urlpatterns = [
     url(r'^editarproducto/(\w+)/', 'app.views.editarproducto'),
     url(r'^eliminarproducto/(\w+)/', 'app.views.eliminarproducto'),
     url(r'^search/$', 'app.views.search', name='search'),
+    url(r'^subcategoria/(\w+)/$', 'app.views.subcategoria'),
+    url(r'^detalle/(\w+)/$', 'app.views.detalle', name='search'),
+    url(r'^scrap/(?P<slug>[-\w]+)$', 'app.views.scrap'),
+ 
 
 
 ]

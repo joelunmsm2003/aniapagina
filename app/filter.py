@@ -1,7 +1,7 @@
-import django_filters
-from app.models import *
+# import django_filters
+# from app.models import *
 
-class ProductoFilter(django_filters.FilterSet):
-    class Meta:
-        model = Producto
-        fields = ['titulo', 'descripcion', 'precio']
+# class ProductoFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = Producto
+#         fields = ['titulo', 'descripcion', 'precio']

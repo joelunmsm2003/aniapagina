@@ -36,11 +36,16 @@ from datetime import datetime,timedelta
 from django.contrib.auth import authenticate
 import re
 from django.contrib.sites.shortcuts import get_current_site
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
-from .forms import *
-from .filtros import *
+#from .filtros import *
 
 
+# import the logging library
+import logging
+import requests
+from bs4 import BeautifulSoup
 
 def mobile(request):
 	"""Return True if the request comes from a mobile device."""
@@ -80,13 +85,13 @@ def home(request):
 
 	if user:
 
-		usuario= AuthUser.objects.get(id=user)
+		usuario= User.objects.get(id=user)
 
-		if ('https://' in str(usuario.photo))==False:
+		# if ('https://' in str(usuario.photo))==False:
 
-			usuario.photo = str(host)+str(usuario.photo)
+		# 	usuario.photo = str(host)+str(usuario.photo)
 
-	categoria = Categoria.objects.all().values('id','nombre','icon','descripcion','imagen')
+	categoria = Categoria.objects.all().values('id','nombre','icon','descripcion','imagen','color','relink')
 
 	favoritos = Favoritoproducto.objects.filter(user_id=user)
 
@@ -327,7 +332,7 @@ def perfil(request):
 
 	productos= Producto.objects.filter(user_id=user)
 
-	usuario= AuthUser.objects.get(id=user)
+	usuario= User.objects.get(id=user)
 
 	if ('https://' in str(usuario.photo))==False:
 
@@ -359,7 +364,7 @@ def favoritos(request):
 
 	productos= Producto.objects.filter(user_id=user)
 
-	usuario= AuthUser.objects.get(id=user)
+	usuario= User.objects.get(id=user)
 
 	if ('https://' in str(usuario.photo))==False:
 
@@ -395,6 +400,48 @@ def favoritos(request):
 
 
 
+def subcategoria(request,nombre):
+
+	print nombre
+
+	s = Subcategoria.objects.filter(categoria__relink=nombre,check_imagen=0)
+	portada = Subcategoria.objects.filter(categoria__relink=nombre,check_imagen=1)
+	c= Categoria.objects.all()
+
+	cliente={}
+
+	print request.user
+
+	cli = Cliente.objects.filter(user_id=request.user.id)
+
+	if cli.count()>0:
+
+		cli = Cliente.objects.get(user_id=request.user.id)
+
+	cat = Categoria.objects.get(relink=nombre)
+
+	return render(request, 'subcategoria.html',{'cliente':cli,'subcategorias':s,'categoria':c,'portada':portada,'detalle_categoria':cat})
+
+
+def detalle(request,nombre):
+
+	c=  Categoria.objects.all()
+	d = Subcategoria.objects.get(nombre=nombre)
+
+
+	d = Subcategoria.objects.get(nombre=nombre)
+
+
+
+	cat = Categoria.objects.get(relink=d.categoria.relink)
+
+	print cat
+
+	Marketing(subcategoria_id=d.id).save()
+
+	return render(request, 'detalle.html',{'categoria':c,'detalle':d,'detalle_categoria':cat})
+
+
 
 @login_required(login_url="/autentificacion")
 
@@ -414,7 +461,7 @@ def actualizaperfil(request):
 
 		productos= Producto.objects.filter(user_id=user)
 
-		usuario= AuthUser.objects.get(id=user)
+		usuario= User.objects.get(id=user)
 
 		username = request.POST['username']
 		
@@ -430,14 +477,14 @@ def actualizaperfil(request):
 
 				photo =  request.FILES['photo']
 
-				u = AuthUser.objects.get(id=user)
+				u = User.objects.get(id=user)
 
 				u.photo=photo
 
 				u.save()
 
 
-		u = AuthUser.objects.get(id=user)
+		u = User.objects.get(id=user)
 
 		u.direccion = direccion
 
@@ -513,7 +560,7 @@ def filtrarcategoria(request,dato,categoria):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 	for p in productos:
 
@@ -581,7 +628,7 @@ def filtrarsubcategoria(request,dato,subcategoria):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 	for p in productos:
 
@@ -674,7 +721,7 @@ def chat(request,id_user,id_producto):
 
 
 
-	usuario= AuthUser.objects.get(id=user)
+	usuario= User.objects.get(id=user)
 
 	if ('https://' in str(usuario.photo))==False:
 
@@ -721,7 +768,7 @@ def productos(request,id):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 		if ('https://' in str(usuario.photo))==False:
 
@@ -744,7 +791,7 @@ def productos(request,id):
 
 
 
-	userproducto = AuthUser.objects.get(id=id)
+	userproducto = User.objects.get(id=id)
 
 	favoritos = Favoritoproducto.objects.filter(user_id=user)
 
@@ -784,7 +831,7 @@ def productosamostrar(request,id):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 		if ('https://' in str(usuario.photo))==False:
 
@@ -807,7 +854,7 @@ def productosamostrar(request,id):
 
 
 
-	userproducto = AuthUser.objects.get(id=id)
+	userproducto = User.objects.get(id=id)
 
 	m=None
 	if mobile(request):
@@ -839,7 +886,7 @@ def clasificados(request):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 		if ('https://' in str(usuario.photo))==False:
 
@@ -879,7 +926,7 @@ def prueba(request):
 @login_required(login_url="/autentificacion")
 def detallechat(request,user,producto):
 
-	usuario_receptor= AuthUser.objects.get(id=user)
+	usuario_receptor= User.objects.get(id=user)
 
 	user_id = request.user.id
 
@@ -887,7 +934,7 @@ def detallechat(request,user,producto):
 
 	if user_id:
 
-		usuario =AuthUser.objects.get(id=user_id)
+		usuario =User.objects.get(id=user_id)
 
 		if ('https://' in str(usuario.photo))==False:
 
@@ -923,7 +970,7 @@ def detallechatpc(request,user,id_producto):
 	if int(user)!=1:
 
 
-		usuario_receptor= AuthUser.objects.get(id=user)
+		usuario_receptor= User.objects.get(id=user)
 
 		usuario = None
 
@@ -954,7 +1001,7 @@ def detallechatpc(request,user,id_producto):
 
 		if user_id:
 
-			usuario =AuthUser.objects.get(id=user_id)
+			usuario =User.objects.get(id=user_id)
 
 			if ('https://' in str(usuario.photo))==False:
 
@@ -1012,7 +1059,7 @@ def marcas(request):
 
 def provincias(request):
 
-	f = Provincia.objects.all().values('id','name')
+	f = Provincia.objects.all().values('id','name').order_by('orden')
 
 	f = ValuesQuerySetToDict(f)
 
@@ -1040,6 +1087,136 @@ def colores(request):
 	f = simplejson.dumps(f)
 
 	return HttpResponse(f, content_type="application/json")
+
+
+def verifica_si_existe_fono(slug):
+
+
+	page = requests.get(slug)
+
+	soup = BeautifulSoup(page.content, 'html.parser')
+
+
+	if soup.find_all("strong", class_="number"):
+
+
+
+		number =  list(soup.find_all("strong", class_="number")[0].children)[0].encode('utf-8')
+
+		number='Ok'
+
+	else:
+
+		number ='No existe'
+
+	return number
+
+
+def sele(slug):
+
+	driver = webdriver.Chrome('/home/joel/chromedriver')
+
+	print slug
+	driver.get(slug)
+
+
+	elem = driver.find_element_by_partial_link_text('Mostrar n')
+
+
+
+	elem.click()
+
+	elem = driver.find_element_by_class_name('number')
+	number = elem.text
+
+	driver.close()
+
+
+	return number
+
+def scrap(request,slug):
+
+	print 'entrando..'
+
+
+
+	count = 1
+
+	while 1:
+
+		print 'The count is:', count
+
+		count = count + 1
+
+		pag = '-p-'+str(count)
+
+		page = requests.get("https://lima-lima.olx.com.pe/"+slug+pag)
+
+		soup = BeautifulSoup(page.content, 'html.parser')
+
+
+
+
+		for c in soup.find_all('a'):
+
+			c = str(c).split('href="')[1].split(' ')[0]
+
+			if '//lima-lima' in c:
+
+				iid = c.split('"')[0].split('-iid-')
+
+				if int(len(iid))==2:
+
+
+
+					if Scrap.objects.filter(iid=iid[1]).count()==0:
+
+						link = c.split('"')[0].replace('//','http://')
+
+
+						print str(verifica_si_existe_fono(link))
+
+						if str(verifica_si_existe_fono(link))=='Ok':
+
+							print 'entre...'
+
+							telefono= sele(link)
+
+						else:
+
+							telefono=''
+
+						print telefono
+
+
+						Scrap(link=link,nombre=slug,iid=iid[1],telefono=telefono).save()
+
+
+	c= simplejson.dumps('ok')
+
+	return HttpResponse(c, content_type="application/json")
+
+
+@csrf_exempt
+def scrapping3(request,slug):
+
+
+	s = Scrap.objects.get(id=725)
+
+
+	page = requests.get(s.link.replace('//','http://'))
+
+	soup = BeautifulSoup(page.content, 'html.parser')
+
+	titulo =  list(soup.find_all('h1')[1].children)[0].encode('utf-8')
+
+	descripcion = list(soup.find_all("p", class_="item_partials_description_view")[0].children)[0].encode('utf-8')
+
+	number =  list(soup.find_all("strong", class_="icon-material-cat-830")[0].children)[0].encode('utf-8')
+
+	c= simplejson.dumps('ok')
+
+	return HttpResponse(c, content_type="application/json")
 
 
 
@@ -1123,7 +1300,7 @@ def busquedacategoria(request,categoria,subcategoria):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 	if precio=='null':
 
@@ -1365,7 +1542,7 @@ def producto(request,id):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 		if ('https://' in str(usuario.photo))==False:
 
@@ -1457,7 +1634,7 @@ def busqueda(request):
 
 		if user:
 
-			usuario =AuthUser.objects.get(id=user)
+			usuario =User.objects.get(id=user)
 
 		categoria = Categoria.objects.all()
 
@@ -1526,7 +1703,7 @@ def productojson(request,id):
 
 	if user:
 
-		usuario =AuthUser.objects.get(id=user)
+		usuario =User.objects.get(id=user)
 
 	
 	photos = Photoproducto.objects.filter(producto_id=id).values('id','photo__photo')
@@ -1558,7 +1735,7 @@ def usuario(request,id):
 
 	user = request.user.id
 
-	usuario= AuthUser.objects.get(id=user)
+	usuario= User.objects.get(id=user)
 
 	return render(request, 'usuario.html',{'host':host,'usuario':usuario})
 
@@ -1596,7 +1773,7 @@ def enviamensaje(request):
 
 		url = 'https://m.estokealo.com/enviarnotis/'
 
-		first_name = AuthUser.objects.get(id=user).first_name
+		first_name = User.objects.get(id=user).first_name
 
 		fecha = datetime.today()-timedelta(hours=5)
 
@@ -1621,9 +1798,9 @@ def enviamensaje_perfil(request):
 
 		user = request.user.id
 
-		first_name = AuthUser.objects.get(id=user).first_name
+		first_name = User.objects.get(id=user).first_name
 
-		photo_user= str(AuthUser.objects.get(id=user).photo)
+		photo_user= str(User.objects.get(id=user).photo)
 
 		if ('https://' in str(photo_user))==False:
 
@@ -1890,9 +2067,11 @@ def subirimgprofile(request):
 
 		user = request.user.id
 
-		u=AuthUser.objects.get(id=user)
-		u.photo = pf
-		u.save()
+		u=User.objects.get(id=user)
+
+		cli=Cliente.objects.get(user_id=request.user.id)
+		cli.imagen=pf
+		cli.save()
 
 		id_producto = simplejson.dumps('Bienvenido')
 
@@ -1981,13 +2160,16 @@ def loginxfacebook(request):
 
 	if request.method == 'POST':
 
-		if request.user.is_authenticated():
+		
 
+		if request.user.is_authenticated():
 
 			id_producto = simplejson.dumps('Ya esta logeado')
 
 			return HttpResponse(id_producto, content_type="application/json")
 		else:
+
+			print 'skksksks'
 
 			id= request.POST['id']
 
@@ -2003,7 +2185,7 @@ def loginxfacebook(request):
 
 					id_user = request.user.id
 
-					u = AuthUser.objects.get(id=id_user)
+					u = User.objects.get(id=id_user)
 
 					u.first_name = name
 
@@ -2020,6 +2202,8 @@ def loginxfacebook(request):
 				user = authenticate(username=id, password=id)
 
 				id_producto = simplejson.dumps('nuevo user')
+
+				Cliente(user_id=user.id).save()
 
 				return HttpResponse(id_producto, content_type="application/json")
 
@@ -2109,9 +2293,9 @@ def vender(request):
 
 	if user:
 
-		id_user= AuthUser.objects.get(id=user).id
+		id_user= User.objects.get(id=user).id
 
-		usuario=AuthUser.objects.get(id=user)
+		usuario=User.objects.get(id=user)
 
 	if request.method == 'POST':
 

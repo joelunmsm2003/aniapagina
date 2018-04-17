@@ -1,584 +1,106 @@
-<!doctype html>
-<html ng-app="myApp" ng-controller="myCtrl">
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  {% extends 'base.html' %}
 
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="/static/app/home.js"></script>
 
-	<title>Estokealo</title>
-</head>
 
-<style type="text/css">
-  .material-icons{
-      line-height: .6;
-  }
+  {% block content %}
 
-  .modal-header{
-            padding-left: 63px;
-    padding-top: 24px;
-  }
+
+
+
+
+
 
   
-            .catis{
-
-            width: 100%;
-            background: #fff;
-            height: 100%;
-
-            display: flex;
-            display: -webkit-flex;
-            flex-flow: row;
-            flex-wrap: nowrap;
-            padding-left: 10px;
-            padding-top: 2px;
-            align-content: center;
-            flex-wrap: wrap;
-            opacity: 0.9;
-            }
-
-            .subcatis{
-
-              background: #37475a;
-              padding: 18px;
-              margin: 5px;
-              max-width: 198px;
-              color: #fff;
-              border: 1px solid #234;
-              border-radius: 3px;
-              font-size: 14px;
-              text-align: center;
-              height:58px;
-            }
-
-            .list-group-item{
-
-              cursor:pointer;
-            }
-          </style>
-
-
-<body>
-
-
-{% include "header.html" %}
-
-    <div class='container ' style='margin-top:7em;'>
-
-    <p style='font-size: 27px;
-    color: #37475a; cursor: pointer;'> <a style='color:#35aaa0' data-toggle="modal" data-target="#categorias">Categorias<i class="fa fa-angle-down" aria-hidden="true"></i></a> </p> 
+        <div class="container">
 
 
 
-    <!-- Modal de Categorias-->
-    <div id="categorias" class="modal fade" role="dialog">
-      <div class="modal-dialog modal-lg">
+        <nav class="navbar navbar-expand-md navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">Ania</a>
+    <ul class="navbar-nav mr-auto">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <span style='font-size:24px;'>Escoja una categoria</span>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-           
-          </div>
-          <div class="modal-body distritos">
-            
-          <div class="row">
-            
-              <div ng-repeat='n in mostrarcategorias' class='col-md-3'>
-              <span style='font-size: 14px; font-weight: bold; cursor: pointer;'>{[{n.nombre}]}</span>
-              <br>
-              <div ng-repeat='s in n.subcategoria' ng-click='enviasuv(s.id)'>
-              <span style='cursor: pointer;'>{[{s.nombre}]}  </span>
-              </div>
-              </div>
+    {% for item in categoria %}
+  <li class="nav-item">
+    <a class="nav-link active" style='   color: #000;' href='/subcategoria/{{item.relink}}/'>{{item.nombre}}</a>
+  </li>
 
-          </div>
-           
-
-
-          </div>
-          
-        </div>
-
-      </div>
-    </div>
+{% endfor %}
 
 
 
-    <div class="row no-gutters" style="">
-    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link"   href="#"><img src="{{cliente.imagen}}" class='img-fluid rounded-circle'></a>
+      </li>
 
-    <ul class="list-group cat"  >
+      <li class='nav-item'>
 
-          {% for c in categoria %}
+<a class="nav-link"   href="/salir">Salir</a>
+</li>
+     
+    </ul>
+  </nav>
+
+
+
+<!-- <ul class="nav">
+
+  <li class="nav-item">
+    <a class="nav-link active" href='#' style='font-size: 38px;     color: #000;'>Ania</a>
+  </li>
+
+ 
+{% for item in categoria %}
+  <li class="nav-item">
+    <a class="nav-link active" style='padding-top: 27px;     color: #000;' href='/subcategoria/{{item.relink}}/'>{{item.nombre}}</a>
+  </li>
+
+{% endfor %}
+
+
+ <li class='nav-item'>
+
+<a class="nav-link"  style='padding-top: 27px; ' href="/salir">Salir</a>
+</li>
+
+
+
+ <li class='nav-item'>
+
+<a class="nav-link"  style='padding-top: 11px; ' href="#"><img src="{{cliente.imagen}}" class='img-fluid rounded-circle'></a>
+</li>
+
+
+
+
+
+
+</ul> -->
+
 
           
-
-          <li ng-click='buscat({{c.id}})' class="list-group-item"  ng-mouseover='traesubcategorias({{c.id}})'><span class='iconocat' style='padding-right: 12px;  '><i class="material-icons">{{c.icon}}</i></span>  {{c.nombre}}  </li>
-
-
-
-          {% endfor %}
-
-     <!--       <li ng-click='buscat(c.id)' ng-repeat='c in mostrarcategorias' class="list-group-item" ng-mouseover='traesubcategorias(c)'><span class='iconocat' style='padding-right: 12px; padding-right: 12px;
-    
-    padding-left: 5px;
-'><i class="material-icons">{[{c.icon}]}</i></span>   {[{c.nombre}]}
-
-           </li>
- -->
-      </ul>
-
-
-    </div>
-
-      
-
-        <div class='subcat'  >
-
-
-        <div class='row no-gutters' style='background: #fff;
-line-height: 39px; 
-    min-height: 431px;max-height: 100px;display: none;' >
-
-          <div class='col-md-4' style="background: #1ea095;
-    color: #fff; padding-top: 45px;
-    padding-left: 66px;">
-
-                <span>{[{descripcion}]}</span>
-
-                <div  style='cursor:pointer;' ng-repeat="c in subcategorias" ng-click='enviasuv(c.id)' ><a>
                
-                 {[{c.nombre}]} </a></div>
-
-              </div>
-
-              <div class='col-md-8'><img src='{{host}}{[{imagencategoria}]}' class='img-fluid' style='max-height: 526px; padding: 52px;'>
-
-              </div>
-
-             
-
-       
-
 
 
 
         </div>
 
 
-          
-
-        </div> 
 
 
 
-
-
-    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 animated fadeIn" >
-
-
-          
-
-           <div id="myCarousel" class="carousel slide" data-ride="carousel" ng-mouseover='ocultasub()'>
-            <ol class="carousel-indicators">
-              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-              <li data-target="#myCarousel" data-slide-to="1"></li>
-              <li data-target="#myCarousel" data-slide-to="2"></li>
-              <li data-target="#myCarousel" data-slide-to="3"></li>
-            </ol>
-            <div class="carousel-inner">
-              <div class="carousel-item primera active">
-           <!--      <img class="first-slide" src="https://s3.amazonaws.com/eb-blog-bloguk/wp-content/uploads/2016/05/03100406/sell-tickets-through-facebook.jpg" alt="First slide"> -->
-                <div class="container sli">
-                  <div class="carousel-caption d-none d-md-block text-left">
-                    <h1 style='color:#fff'>Compra & Vendelo Todo</h1>
-                    <p>Desde tu celular o computadora</p>
-                    <p><a class="btn btn-lg btn-primary" href="/vender" role="button"><i class="fa fa-camera" aria-hidden="true"></i> Vender</a></p>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item segunda">
-                <!-- <img class="first-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Second slide"> -->
-                <div class="container sli"  >
-                  <div class="carousel-caption d-none d-md-block">
-                    <h1 style='color:#fff'>Registrate y inicia sesion</h1>
-                    <p>Es completamente gratis</p>
-                    <p><a class="btn btn-lg btn-primary" href="/ingresar" role="button">Registrate</a></p>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item tercera">
-               <!--  <img class="first-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Third slide"> -->
-                <div class="container sli"  >
-                  <div class="carousel-caption d-none d-md-block text-right">
-                    <h1 style='color:#fff'>Imagenes Video y Mensajes</h1>
-                    <p>Interactua efizcamente</p>
-                    <p><a class="btn btn-lg btn-primary" href="/vender" role="button"><i class="fa fa-camera" aria-hidden="true"></i> Vender</a></p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="carousel-item cuarta">
-               <!--  <img class="first-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Third slide"> -->
-                <div class="container sli" >
-                  <div class="carousel-caption d-none d-md-block text-right">
-                    <h1 style='color:#fff'>Tienda Virtual</h1>
-                    <p>Al registrate ya tendras tu propia tienda virtual</p>
-                    <p><a class="btn btn-lg btn-primary" href="/vender" role="button"><i class="fa fa-camera" aria-hidden="true"></i> Vender</a></p>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
-          
-      
-    </div>
-
-    </div>
-
-    </div>
-
-
-
-
-
-<div class='container' ng-mouseover='ocultasub()'>
-
-
-<p style='font-size: 27px;
-    color: #37475a;'>Anuncios publicados en <a style='color:#35aaa0' data-toggle="modal" data-target="#provincias">Lima <i class="fa fa-angle-down" aria-hidden="true"></i></a> </p> 
-
-
-
-
-
-
-<!-- Modal de Provincias -->
-<div id="provincias" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <span style='font-size:24px;'>Selecciona tu ciudad o provincia</span>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-       
-      </div>
-      <div class="modal-body distritos">
+        {% block subcategorias %}
         
 
-        <div class='row'>
-          <div ng-repeat='n in provincias' class='col-md-3'>
-            <a href='https://www.{[{n.name}]}.estokealo.com'>{[{n.name}]}</a>
-          </div>
-        </div>
+        {% endblock %}
 
 
-      </div>
-      
-    </div>
-
-  </div>
-</div>
-
-
-
-<br>
-
-
-
-
-<div class='row'>
-		{% for producto in productos %}
 
 
   
-
-
- 
-			<div class='col-lg-2 col-md-3 col-sm-4 col-xs-6 card1'>
-
-      
-
-     
-
-         <a class='item' href="/detallechatpc/{{producto.user.id}}/{{producto.id}}">
-    
-     
-
-
-
-      
-			<div class="card" >
-
-    
-
-        <div class='one'>
-			  <img class="img-fluid" src="{{host}}{{producto.photo_home}}" alt="{{host}}{{producto.photo_home}}">
-
-
-        <div class='two'>
-
-        {% if producto.photo_home1 %}
-        <img class="card-img-top img-fluid" src="{{host}}{{producto.photo_home1}}" alt="{{host}}{{producto.photo_home1}}">
-        {% endif %}
-        </div>
-
-        </div>
-
-
-
-			  <div class="card-block">
-			  <center><h5>
-
-
-         {% if producto.moneda == 'Dolares' %}
-                USD
-              {% endif %}
-
-
-              {% if producto.moneda == 'Soles' %}
-                S/.
-              {% endif %}
-
-              {{producto.precio}}
-
-
-
-
-
-
-
-
-
-        </h5></center>
-
-
-          <center style='padding-top: 8px;'><span class="card-title">{{producto.titulo}}</span></center>
-               
-                       
-                        
-			    
-			  </div>
-			</div>
-
-
-
-       </a>
-			</div>
-     
-
-			{% endfor %}
-			
-			</div>
-
-
-		</div>
-
-<!-- 
-    <div class='container-fluid'>
-
-
-<div class='row'>
-
-
-
-   
-
-
- 
-      <div ng-repeat='producto in productos' class='col-lg-2 col-md-3 col-sm-4 col-xs-6 card1'>
-
-         <a class='item' href="/producto/{[{producto.id}]}">
-    
-      
-      
-      <div class="card">
-
-        <div class='one'>
-
-         <img class="card-img-top img-fluid"   src="{{host}}{[{producto.photo[0]['photo__photo']}]}" alt="Card image cap"> 
-
-        <div class='two'>
-         <img class="card-img-top img-fluid"   src="{{host}}{[{producto.photo[1]['photo__photo']}]}" alt="Card image cap"> 
-        </div>
-
-        </div>
-         <div class="card-block">
-          <h6 class="card-title">{[{producto.titulo}]}</h6>
-          <p class="card-text">{[{producto.descripcion}]}</p>
-          
-        </div>
-      </div>
-
-
-
-       </a>
-      </div>
-     
-
-
-      
-      </div>
-
-
-    </div>
- -->
-
-	
-<script src="/static/js/jquery-2.1.1.js"></script>
-<script src="/static/js/main.js"></script> <!-- Resource jQuery -->
-</body>
-</html>
-
-<style type="text/css">
-.close{
-  font-size: 26px;
-    padding-right: 13px;
-    color: #000;
-}
-
-.distritos{
-    text-align: left;
-    padding: 69px !important;
-    padding-top: 15px !important;
-    line-height: 1.9;
-    color: #1b232d;
-    font-size: 13px;
-}
-
-/*.modal.fade .modal-dialog {
-    transition: transform 0.3s ease-out;
-    transform: translate(3%, 19%);
-    }
-  .modal.show .modal-dialog {
-    transform: translate(3%, 21%);
-    }*/
-  
-a{
-
-  text-decoration: none !important;
-
-}
-/*.card{
-  box-shadow: 0px 2px 11px #888888;
-}*/
-
-.card1{
-  margin-bottom: 12px;
-}
-
-
-
-.iconocat:hover{
-
-  color: #fff;
-}
-
-.activo{
-
-  background: #234;
-  color:#fff;
-}
-
-
-.desactivo{
-
-  background: #fff;
-  color:#000;
-}
-
-.subcat{
-position: absolute;
-    height: 100%;
-    z-index: 100;
-    left: 259px;
-
-    left: 229px;
-    left: 228px;
-}
-
-
-
-  .one{
-
-    position: relative;
-
-  }
-
-  .two{
-
-  
-    opacity:0;
-
-    position: absolute;
-    top:0;
-    right: 0;
-    left: 0;
-    bottom:0;
-    -webkit-transition: opacity .1s; /* For Safari 3.1 to 6.0 */
-      transition: opacity .1s;
- 
-
-
-
-    }
-
-.card:hover .one .two {
-
-  opacity: 1;
-  /* For Safari 3.1 to 6.0 */
-  transition: opacity .8s; }
-
-  .primera{
-
-    background: url(http://www.straitstimes.com/sites/default/files/articles/2015/11/29/29111536824180_-_28_11_2015_-_lwanime_0.jpg) no-repeat center;
-  }
-
-
-  .segunda{
-
-    
-    background: url(/static/home/Register.jpg) no-repeat center;
-
-  }
-
- .tercera{
-
-
-    background: url(/static/home/crear-una-tienda-virtual.jpg) no-repeat center;
-  }
-
-  .cuarta{
-
-    background: url(https://cdn01.vulcanpost.com/wp-uploads/2014/07/Us-online-shopping.jpg) no-repeat center;
-
-  }
-
-
-</style>
-{% include "footer.html" %}
-
- 
-
-
-</body>
-
-
-</html>
+  {% endblock %}

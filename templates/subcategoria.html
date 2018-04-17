@@ -1,0 +1,191 @@
+
+  {% extends 'home.html' %}
+
+
+
+  {% block subcategorias %}
+
+        <!--
+    ####################################################
+    C A R O U S E L
+    ####################################################
+    -->
+     <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="6000">
+        <ol class="carousel-indicators">
+            <li data-target="#carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel" data-slide-to="1"></li>
+            <li data-target="#carousel" data-slide-to="2"></li>
+        </ol>
+
+       
+        <div class="carousel-inner" role="listbox">
+
+             {% for item in portada %}
+
+            <div class="animated fadeIn carousel-item {{item.activo.nombre}}">
+                <a href="https://bootstrapcreative.com/">
+                  
+                     <picture>
+                      <source srcset="../../{{item.imagen}}" media="(min-width: 1400px)">
+                      <source srcset="../../{{item.imagen}}" media="(min-width: 769px)">
+                       <source srcset="../../{{item.imagen}}" media="(min-width: 577px)">
+                      <img srcset="../../{{item.imagen}}" alt="responsive image" class="d-block img-fluid">
+                    </picture>
+
+                    <div class="carousel-caption">
+                        <div>
+                            <h2>{{item.nombre}}</h2>
+                            <p>{{item.subtitulo}}</p>
+                            <span class="btn btn-sm btn-outline-secondary">Ver Mas</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+          {% endfor %}
+     
+           
+          
+        </div>
+
+            
+     
+        <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div> 
+    <!-- /.carousel -->
+
+ 
+
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+  
+
+
+
+        
+    
+
+
+    <div class="container">
+
+
+    <div class='animated fadeIn' style='font-size: 42px;
+    text-align: center;
+    background: {{detalle_categoria.color}};
+    color: #fff;'>{{detalle_categoria.nombre}}</div>
+
+<div style='font-size: 28px;
+    
+    padding-top: 18px;
+    padding-bottom: 18px;
+    text-align: center;'>{{detalle_categoria.descripcion}}</div>
+
+<!--     <div class='row'>
+{% for item in subcategorias %}
+
+<div class="col-md-3" style='cursor:pointer;' >
+
+    <div class="card" style="width: 18rem;width: 17rem;
+    margin-bottom: 12px;
+    text-align: center;">
+  <img class="card-img-top" src="../../{{item.imagen}}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{item.nombre}}</h5>
+    <p class="card-text">{{item.descripcion |truncatechars:70}}</p>
+    <a href="/detalle/{{item.nombre}}" class="btn btn-dark">Ver Detalle</a>
+  </div>
+</div>
+
+</div>
+{% endfor %}
+
+</div> -->
+
+          
+
+
+         <div class='row'>
+        {% for item in subcategorias %}
+
+            <div class="col-md-3" style='cursor:pointer;' >
+
+
+                <div class="row">
+                  
+                 <a href='/detalle/{{item.nombre}}'><img src="../../{{item.imagen}}" alt="" class="img-fluid" style='padding: 4px;
+    border-radius: 10px;'></a>
+
+
+
+
+                </div>
+
+               
+
+                <div class='row'>
+
+                <div class="col-md-12">
+
+
+                <div class="row">
+                  
+                  <div class="col-md-8">  {{item.nombre}}</div>
+
+                  <div class="col-md-4" style='text-align: right;'><i style='font-size: 26px;
+    padding-top: 5px;' class="fa fa-heart-o" aria-hidden="true"></i></div>
+                </div>
+              
+
+
+                
+                </div>
+
+                <div class="col-md-12" style='font-size: 15px;'>{{item.descripcion |truncatechars:70}}</div>
+
+                
+
+                </div> 
+
+
+                
+            </div>
+        {% endfor %}
+        </div> 
+
+
+    </div>
+
+
+
+
+  
+  {% endblock %}
+
+  <style type="text/css">
+    
+    .no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+  </style>

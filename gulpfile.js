@@ -31,10 +31,7 @@ gulp.task('styles', function() {
 				cascade: false
 		}))
 		.pipe(gulp.dest('./static/css/'))
-		.pipe(rename({suffix: '.min'}))
-		.pipe(cssnano())
-		.pipe(sourcemaps.write('.')) // Creates sourcemaps for minified styles
-		.pipe(gulp.dest('./dist/css/'))
+
 });
 		
 

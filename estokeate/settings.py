@@ -43,7 +43,7 @@ PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
 
-MEDIA_ROOT = os.path.join(PROJECT_PATH, '/home/estokeate')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, '/home/joel/proyectos/ania/')
 
 #MEDIA_URL = '/var/www/html/'
 
@@ -67,7 +67,6 @@ INSTALLED_APPS = [
     'django.contrib.auth.hashers',
     'corsheaders',
     'app',
-    'django_filters',
 ]
 
 
@@ -125,7 +124,7 @@ WSGI_APPLICATION = 'estokeate.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'estokeate',
+        'NAME': 'ani',
         'USER': 'root',
         'PASSWORD': '123',
         'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on

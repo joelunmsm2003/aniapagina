@@ -11,7 +11,7 @@
 // ==========================================================================
 
 html {
-  font-family: "Open Sans"; // 1
+  font-family: sans-serif; // 1
   line-height: 1.15; // 2
   -ms-text-size-adjust: 100%; // 3
   -webkit-text-size-adjust: 100%; // 3
@@ -105,7 +105,6 @@ pre {
 a {
   background-color: transparent; // 1
   -webkit-text-decoration-skip: objects; // 2
-  text-decoration: none;
 }
 
 //
@@ -255,7 +254,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family:"Open Sans";
+  font-family: sans-serif; // 1
   font-size: 100%; // 1
   line-height: 1.15; // 1
   margin: 0; // 2
