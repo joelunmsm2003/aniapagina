@@ -5,7 +5,7 @@ from django.contrib import admin
 urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
-    url(r'^$', 'app.views.home'),
+    url(r'^$', 'app.views.redirect'),
     url(r'^autentificacion$', 'app.views.autentificacion'),
     url(r'^autentificacion/$', 'app.views.autentificacion'),
     url(r'^productos/$', 'app.views.productos'),
@@ -71,11 +71,13 @@ urlpatterns = [
     url(r'^mostrarcategorias/', 'app.views.mostrarcategorias'),
     url(r'^clasificados/', 'app.views.clasificados'),
     url(r'^favoritos/', 'app.views.favoritos'),
+    url(r'^tienda/', 'app.views.tienda'),
+    url(r'^contacto/', 'app.views.contacto'),
     url(r'^editarproducto/(\w+)/', 'app.views.editarproducto'),
     url(r'^eliminarproducto/(\w+)/', 'app.views.eliminarproducto'),
     url(r'^search/$', 'app.views.search', name='search'),
     url(r'^subcategoria/(\w+)/$', 'app.views.subcategoria'),
-    url(r'^detalle/(\w+)/$', 'app.views.detalle', name='search'),
+    url(r'^detalle/(?P<slug>[-\w]+)$', 'app.views.detalle'),
     url(r'^scrap/(?P<slug>[-\w]+)$', 'app.views.scrap'),
  
 

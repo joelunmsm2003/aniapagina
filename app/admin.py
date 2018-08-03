@@ -74,7 +74,7 @@ def resize_and_crop(img_path, modified_path, size, crop_type='top'):
 
 @admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
-    list_display = ('id','nombre','descripcion','icon','imagen')
+    list_display = ('id','nombre','descripcion')
 
 
 
@@ -96,22 +96,28 @@ class ClienteAdmin(admin.ModelAdmin):
     list_display = ('id','nombre')
 
 
-@admin.register(Producto)
-class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('id','titulo','descripcion','moneda')
-    list_editable = ('titulo',)
+# @admin.register(Producto)
+# class ProductoAdmin(admin.ModelAdmin):
+#     list_display = ('id','titulo','descripcion','moneda')
+#     list_editable = ('titulo',)
 
-    def marca(self, obj):
-        if obj.auto:
-            return obj.auto.marca.nombre
+#     def marca(self, obj):
+#         if obj.auto:
+#             return obj.auto.marca.nombre
 
-    def modelo(self, obj):
-        if obj.auto:
-            return obj.auto.modelo.nombre
+#     def modelo(self, obj):
+#         if obj.auto:
+#             return obj.auto.modelo.nombre
 
 @admin.register(Photoproducto)
 class PhotoproductoAdmin(admin.ModelAdmin):
     list_display = ('id','photo','producto')
+
+
+
+@admin.register(Datodepagina)
+class DatodepaginaAdmin(admin.ModelAdmin):
+    list_display = ('id','titulo')
 
 
 @admin.register(Scrap)
@@ -214,29 +220,52 @@ class ScrapAdmin(admin.ModelAdmin):
 
 @admin.register(Subcategoria)
 class SubcategoriaAdmin(admin.ModelAdmin):
-    list_display = ('getcategoria','nombre','check_imagen','activo')
+    list_display = ('getcategoria','nombre','check_imagen','activo','relink')
     list_filter = ('categoria__nombre',)
 
     def getcategoria(self, obj):
 		return obj.categoria.nombre
 
     def save_model(self, request, obj, form, change):
+
+
+        print 'Save model'
         
         super(SubcategoriaAdmin, self).save_model(request, obj, form, change)
+
+        c = Subcategoria.objects.get(id=obj.id)
+        c.relink=c.nombre.replace(' ','_')
+        c.save()
+        
         
         if Subcategoria.objects.get(id=obj.id).imagen and obj.check_imagen==1:
 
-            caption = '/home/joel/proyectos/ania/'+str(Subcategoria.objects.get(id=obj.id).imagen)
+            caption = '/home/aniapagina/'+str(Subcategoria.objects.get(id=obj.id).imagen)
 
             resize_and_crop(caption, caption, (2000,500), crop_type='top')
 
         else:
 
-            caption = '/home/joel/proyectos/ania/'+str(Subcategoria.objects.get(id=obj.id).imagen)
 
-            resize_and_crop(caption, caption, (1000,1500), crop_type='top')
+            print 'Cortando fotos....'
+
+            caption = '/home/aniapagina/'+str(Subcategoria.objects.get(id=obj.id).imagen)
+
+            resize_and_crop(caption, caption, (1000,1700), crop_type='top')
+
+            if Subcategoria.objects.get(id=obj.id).imagen2:
+
+                caption = '/home/aniapagina/'+str(Subcategoria.objects.get(id=obj.id).imagen2)
+
+                resize_and_crop(caption, caption, (1000,950), crop_type='top')
+
+            if Subcategoria.objects.get(id=obj.id).imagen3:
+
+                caption = '/home/aniapagina/'+str(Subcategoria.objects.get(id=obj.id).imagen3)
+
+                resize_and_crop(caption, caption, (1000,950), crop_type='top')
 
 
-
+            
 
 

@@ -59,7 +59,17 @@ def ValuesQuerySetToDict(vqs):
 
 	return [item for item in vqs]
 
+
+def redirect(request):
+
+
+	return HttpResponseRedirect("/subcategoria/Fiesta")
+
+
 def home(request):
+
+
+	d = Datodepagina.objects.get(id=1)
 
 	user = request.user.id
 
@@ -125,7 +135,7 @@ def home(request):
 
 	else:	
 
-		return render(request, 'home.html',{'favoritos':favoritos,'productos':productos,'usuario':usuario,'host':host,'categoria':categoria})
+		return render(request, 'home.html',{'favoritos':favoritos,'productos':productos,'usuario':usuario,'host':host,'categoria':categoria,'pagina':d})
 
 
 def autentificacion(request):
@@ -299,13 +309,12 @@ def editarproducto(request,id):
 
 
 
-@login_required(login_url="/autentificacion")
 
 def salir(request):
 
 	logout(request)
 	
-	return HttpResponseRedirect("/")
+	return HttpResponseRedirect("/subcategoria/Fiesta")
 
 
 
@@ -404,6 +413,9 @@ def subcategoria(request,nombre):
 
 	print nombre
 
+
+	d = Datodepagina.objects.get(id=1)
+
 	s = Subcategoria.objects.filter(categoria__relink=nombre,check_imagen=0)
 	portada = Subcategoria.objects.filter(categoria__relink=nombre,check_imagen=1)
 	c= Categoria.objects.all()
@@ -420,26 +432,26 @@ def subcategoria(request,nombre):
 
 	cat = Categoria.objects.get(relink=nombre)
 
-	return render(request, 'subcategoria.html',{'cliente':cli,'subcategorias':s,'categoria':c,'portada':portada,'detalle_categoria':cat})
+	return render(request, 'subcategoria.html',{'cliente':cli,'subcategorias':s,'categoria':c,'portada':portada,'detalle_categoria':cat,'pagina':d})
 
 
-def detalle(request,nombre):
+def detalle(request,slug):
 
 	c=  Categoria.objects.all()
-	d = Subcategoria.objects.get(nombre=nombre)
 
+	de = Datodepagina.objects.get(id=1)
 
-	d = Subcategoria.objects.get(nombre=nombre)
-
-
+	d = Subcategoria.objects.get(relink=slug)
 
 	cat = Categoria.objects.get(relink=d.categoria.relink)
+
+	cli = Cliente.objects.filter(user_id=request.user.id)
 
 	print cat
 
 	Marketing(subcategoria_id=d.id).save()
 
-	return render(request, 'detalle.html',{'categoria':c,'detalle':d,'detalle_categoria':cat})
+	return render(request, 'detalle.html',{'cliente':cli,'categoria':c,'detalle':d,'detalle_categoria':cat,'pagina':de})
 
 
 
@@ -710,6 +722,48 @@ def recibenotis(request):
 	# f.close()
 
 	return render(request, 'home.html',{}) 
+
+
+
+def tienda(request):
+
+
+
+	c= Categoria.objects.all()
+
+	cliente={}
+
+	print request.user
+
+	cli = Cliente.objects.filter(user_id=request.user.id)
+
+	if cli.count()>0:
+
+		cli = Cliente.objects.get(user_id=request.user.id)
+
+
+	d = Datodepagina.objects.get(id=1)
+
+
+	return render(request, 'tienda.html',{'cliente':cli,'categoria':c,'pagina':d})
+
+
+
+def contacto(request):
+
+
+	return render(request, 'contacto.html',{}) 
+
+
+
+
+
+
+
+
+
+
+
 
 @login_required(login_url="/autentificacion")
 def chat(request,id_user,id_producto):
@@ -2058,28 +2112,6 @@ def verificalogin(request):
 
 
 
-@csrf_exempt
-def subirimgprofile(request):
-
-	if request.method == 'POST':
-
-		pf= request.POST['img']
-
-		user = request.user.id
-
-		u=User.objects.get(id=user)
-
-		cli=Cliente.objects.get(user_id=request.user.id)
-		cli.imagen=pf
-		cli.save()
-
-		id_producto = simplejson.dumps('Bienvenido')
-
-
-		return HttpResponse(id_producto, content_type="application/json")
-
-
-
 
 
 @csrf_exempt
@@ -2150,6 +2182,29 @@ def mostrarcategorias(request):
 
 
 
+@csrf_exempt
+def subirimgprofile(request):
+
+	if request.method == 'POST':
+
+		pf= request.POST['img']
+
+		id_usuario = request.user.id
+
+		u=User.objects.get(id=id_usuario)
+
+		cli=Cliente.objects.get(user_id=request.user.id)
+		cli.imagen=pf
+		cli.save()
+
+		id_producto = simplejson.dumps('Bienvenido')
+
+		#return HttpResponseRedirect("/subcategoria/Fiesta")
+
+		return HttpResponse(id_producto, content_type="application/json")
+
+
+
 
 @csrf_exempt
 def loginxfacebook(request):
@@ -2163,6 +2218,8 @@ def loginxfacebook(request):
 		
 
 		if request.user.is_authenticated():
+
+			print 'Ya esta logeado'
 
 			id_producto = simplejson.dumps('Ya esta logeado')
 
@@ -2200,6 +2257,8 @@ def loginxfacebook(request):
 				User.objects.create_user(id, id, id)
 
 				user = authenticate(username=id, password=id)
+
+				login(request, user)
 
 				id_producto = simplejson.dumps('nuevo user')
 

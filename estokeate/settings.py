@@ -43,7 +43,7 @@ PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
 
-MEDIA_ROOT = os.path.join(PROJECT_PATH, '/home/joel/proyectos/ania/')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, '/home/aniapagina/')
 
 #MEDIA_URL = '/var/www/html/'
 
@@ -126,7 +126,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'ani',
         'USER': 'root',
-        'PASSWORD': '123',
+        'PASSWORD': 'rosa0000',
         'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }

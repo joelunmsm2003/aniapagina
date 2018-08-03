@@ -12,21 +12,35 @@
 
 
   
-    <div class='animated fadeIn' style='font-size: 42px;
+  
+
+
+
+<div class='container-fluid' style='margin-top:12px;'>
+
+  <div  style='font-size: 42px;
     text-align: center;
     background: {{detalle_categoria.color}};
     color: #fff;'>{{detalle_categoria.nombre}}</div>
 
 
-
-<div class='container' style='margin-top:10px;'>
-
-
-<div class="row">
+<div class="row  no-gutters " >
     
-    <div class="col-md-6"><img src="../../{{detalle.imagen}}" alt="" class='img-fluid'></div>
+    <div class="col-md-5 animated fadeIn" ><img src="../../{{detalle.imagen}}" alt="" class='img-fluid'></div>
+
+     <div class="col-md-4 animated fadeIn" >
+
+    <div class="row"> <div class='col-md-12'> <img  src="../../{{detalle.imagen2}}" alt="" class='img-fluid'></div> </div>
+
+    <div class="row"> <div class='col-md-12'> <img src="../../{{detalle.imagen3}}" alt="" class='img-fluid'></div> </div>
     
-    <div class="col-md-6">
+
+
+
+     </div>
+    
+    
+    <div class="col-md-3 animated slideInLeft" style='background: {{detalle_categoria.color}};color:#fff;opacity:.5;'>
 
         <div class="row" style='padding: 60px;
     line-height: 32px;'>
@@ -36,17 +50,7 @@
             <div class="col-md-12" style="font-size: 20px;">{{detalle.descripcion}}</div>
 
         </div>
-
-
-
-
-
-
-
-
-
-
-</div>
+    </div>
 
 </div>
   

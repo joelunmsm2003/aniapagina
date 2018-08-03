@@ -1,4 +1,7 @@
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+
   {% extends 'base.html' %}
 
 
@@ -8,7 +11,19 @@
 
 
 
+<style>
 
+
+.nav-item{
+padding-top: 12px;
+font-size: 21px;
+
+}
+    
+
+
+
+</style>
 
 
   
@@ -16,20 +31,36 @@
 
 
 
-        <nav class="navbar navbar-expand-md navbar-light bg-faded">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="#">Ania</a>
+
+      <nav class="navbar navbar-expand-lg navbar-light  bg-faded" style='line-height: 50px;'>
+  <a class="navbar-brand" href="#" style='font-size: 65px;'>{{pagina.titulo}}</a>
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  
     <ul class="navbar-nav mr-auto">
 
     {% for item in categoria %}
   <li class="nav-item">
-    <a class="nav-link active" style='   color: #000;' href='/subcategoria/{{item.relink}}/'>{{item.nombre}}</a>
+    <a class="nav-link active" style='color: {{item.color}};' href='/subcategoria/{{item.relink}}/'>{{item.nombre}}</a>
   </li>
 
 {% endfor %}
 
+
+<li class="nav-item">
+    <a class="nav-link active" href='/tienda'>Tienda</a>
+  </li>
+<!-- 
+<li class="nav-item">
+    <a class="nav-link active" href='/tienda'>Contacto</a>
+  </li>
+ -->
 
 
     </ul>
@@ -38,12 +69,19 @@
         <a class="nav-link"   href="#"><img src="{{cliente.imagen}}" class='img-fluid rounded-circle'></a>
       </li>
 
+          <li class='nav-item'>
+
+<a class="nav-link"   href="#">{{cliente.user.first_name}}</a>
+</li>
+
       <li class='nav-item'>
 
 <a class="nav-link"   href="/salir">Salir</a>
 </li>
      
     </ul>
+
+    </div>
   </nav>
 
 
@@ -102,5 +140,4 @@
 
 
 
-  
   {% endblock %}

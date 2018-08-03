@@ -49,6 +49,10 @@
    function logface(){
 
 
+
+    console.log('Entre aqi....')
+
+
       FB.login(function(response){
         
 
@@ -80,6 +84,12 @@
                       
                         $.post( "../../subirimgprofile/", { img: response.data.url})
                       .done(function( data ) {
+
+
+                        console.log('subirimagenprofile....',data)
+
+
+                        window.location='/subcategoria/Fiesta'
 
                       })
 
@@ -172,7 +182,7 @@
       console.log('Successful login for: ' + response.id);
 
       /* make the API call */
-    FB.api("/10212486937426509/picture?redirect=false",
+    FB.api("/"+response.id+"/picture?redirect=false",
         function (data) {
 
           console.log('picture',data)

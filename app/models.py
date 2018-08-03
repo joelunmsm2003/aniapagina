@@ -17,7 +17,7 @@ class Animal(models.Model):
         db_table = 'animal'
 
 class Estado(models.Model):
-    nombre = models.CharField(max_length=1000, blank=True, null=True)
+    nombre = models.CharField('Primera imagen de portada?',max_length=1000, blank=True, null=True)
 
     class Meta:
         managed = True
@@ -41,9 +41,9 @@ class Cliente(models.Model):
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, blank=True, null=True)
-    icon = models.CharField(max_length=1000, blank=True, null=True)
+    #icon = models.CharField(max_length=1000, blank=True, null=True)
     descripcion = models.TextField(max_length=10000, blank=True, null=True)
-    imagen = models.FileField(upload_to='static')
+    #imagen = models.FileField(upload_to='static', blank=True, null=True)
     color = models.CharField(max_length=1000, blank=True, null=True)
     relink = models.CharField(max_length=1000, blank=True, null=True)
 
@@ -61,12 +61,16 @@ class Subcategoria(models.Model):
     subtitulo = models.CharField(max_length=100, blank=True, null=True)
     descripcion = models.TextField(max_length=10000, blank=True, null=True)
     imagen = models.FileField(upload_to='static',blank=True, null=True)
-    check_imagen = models.BooleanField(max_length=100, default=0)
+    imagen2 = models.FileField(upload_to='static',blank=True, null=True)
+    imagen3 = models.FileField(upload_to='static',blank=True, null=True)
+    check_imagen = models.BooleanField('Imagen para portada?',max_length=100, default=0)
     activo = models.ForeignKey(Estado, models.DO_NOTHING, db_column='activo', blank=True, null=True)
+    relink = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
         managed = True
         db_table = 'subcategoria'
+        verbose_name = 'Imagene'
 
     def __unicode__(self):
         return self.nombre
@@ -83,6 +87,22 @@ class Provincia(models.Model):
         return self.name
 
 
+class Datodepagina(models.Model):
+    titulo = models.CharField(max_length=110, blank=True, null=True)
+    direccion = models.CharField(max_length=110, blank=True, null=True)
+    icono = models.FileField(upload_to='static',blank=True, null=True)
+    lema = models.CharField(max_length=110, blank=True, null=True)
+    telefono = models.CharField(max_length=110, blank=True, null=True)
+    descripcion_tienda = models.CharField(max_length=110, blank=True, null=True)
+    imagen_tienda = models.FileField(upload_to='static',blank=True, null=True)
+
+
+    class Meta:
+        managed = True
+        db_table = 'datodepagina'
+
+    def __unicode__(self):
+        return self.titulo
 
 
 
